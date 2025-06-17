@@ -2,8 +2,6 @@ import pandas as pd
 import os
 import requests
 import time
-import re
-from bs4 import BeautifulSoup
 from typing import List
 
 HEADERS = {
@@ -58,31 +56,15 @@ class DataLoader:
         # Build the URL to access the complete file (.txt format)
         txt_url = f"https://www.sec.gov/Archives/edgar/data/{int(cik)}/{clean_accession}/{accession_number}.txt"
 
-        try:
-            # Download the complete document
-            response = requests.get(txt_url, headers=HEADERS)
-            response.raise_for_status()
+        # Download the complete document
+        response = requests.get(txt_url, headers=HEADERS)
+        response.raise_for_status()
 
-            # Save the document
-            with open(os.path.join(self.save_dir, filename), "w", encoding="utf-8") as f:
-                f.write(response.text)
+        # Save the document
+        with open(os.path.join(self.save_dir, filename), "w", encoding="utf-8") as f:
+            f.write(response.text)
 
-            print(f"[✓] Downloaded: {filename}")
-        except requests.exceptions.HTTPError as e:
-            # If it fails, try an alternative URL format
-            try:
-                # Alternative format with hyphens in the accession
-                formatted_accession = f"{accession_number[:10]}-{accession_number[10:12]}-{accession_number[12:]}"
-                alt_url = f"https://www.sec.gov/Archives/edgar/data/{int(cik)}/{clean_accession}/{formatted_accession}.txt"
-                response = requests.get(alt_url, headers=HEADERS)
-                response.raise_for_status()
-
-                with open(os.path.join(self.save_dir, filename), "w", encoding="utf-8") as f:
-                    f.write(response.text)
-
-                print(f"[✓] Downloaded: {filename} (alternative URL)")
-            except requests.exceptions.HTTPError:
-                print(f"[!] Download failed: {filename} - {str(e)}")
+        print(f"[✓] Downloaded: {filename}")
 
         # Respect SEC API rate limit
         time.sleep(self.delay)
@@ -104,4 +86,9 @@ class DataLoader:
 
 if __name__ == "__main__":
     client = DataLoader()
-    client.fetch_10k_filings("AAPL", count=20)
+
+    # Download 10-K filings over 5 years for a list of tickers
+    #tickers = ["AAPL", "TSLA", "JPM", "CVX", "KO", "AMC", "GME", "PLTR", "MSFT", "JNJ"]
+    tickers = ["AAPL", "TSLA"]
+    for ticker in tickers:
+        client.fetch_10k_filings(ticker, count=5)
