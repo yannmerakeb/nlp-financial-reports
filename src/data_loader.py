@@ -10,6 +10,9 @@ HEADERS = {
 
 class DataLoader:
     def __init__(self, save_dir: str = "../data/raw", delay: float = 0.5):
+        """
+        Initializes the DataLoader with a directory to save files and a delay for rate limiting.
+        """
         self.save_dir = save_dir
         self.delay = delay
         os.makedirs(save_dir, exist_ok=True)
@@ -29,7 +32,7 @@ class DataLoader:
 
         raise ValueError(f"CIK not found for ticker: {ticker}")
 
-    def get_10k_filings(self, cik: str, count: int = 5) -> List[str]:
+    def get_10k_filings(self, cik: str, count: int = 5) -> (List[str], List[str]):
         """
         Fetches URLs of the most recent 10-K filings for a given CIK.
         """
@@ -44,7 +47,10 @@ class DataLoader:
         # filings = list(recent_data['accessionNumber'].head(count).str.replace('-', ''))
         filings = list(recent_data['accessionNumber'].head(count))
 
-        return filings
+        # Extract years from reportDate
+        years = recent_data['reportDate'].head(count).str[:4].tolist()
+
+        return filings, years
 
     def download_filing(self, cik: str, accession_number: str, filename: str):
         """
@@ -76,11 +82,11 @@ class DataLoader:
         cik = self.get_cik(ticker)
         print(f"[+] Ticker: {ticker.upper()} → CIK: {cik}")
 
-        accession_numbers = self.get_10k_filings(cik, count)
+        accession_numbers, years = self.get_10k_filings(cik, count)
         print(f"[+] Found {len(accession_numbers)} 10-K filings")
 
-        for i, accession in enumerate(accession_numbers):
-            year = f"20{accession.split('-')[1]}"
+        for accession, year in zip(accession_numbers, years):
+            # year = f"20{accession.split('-')[1]}"
             fname = f"{ticker}_10K_{year}.txt"
             self.download_filing(cik, accession, fname)
 
@@ -91,4 +97,4 @@ if __name__ == "__main__":
     #tickers = ["AAPL", "TSLA", "JPM", "CVX", "KO", "AMC", "GME", "PLTR", "MSFT", "JNJ"]
     tickers = ["AAPL", "TSLA"]
     for ticker in tickers:
-        client.fetch_10k_filings(ticker, count=5)
+        client.fetch_10k_filings(ticker, count=3)
