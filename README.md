@@ -15,7 +15,6 @@ nlp-financial-reports/
 ├── data/
 │ ├── raw/ # Original 10-K filings and market data
 │ └── processed/ # Cleaned and labeled text data
-│ └── processed/ # Cleaned text, extracted features, labels
 │
 ├── notebooks/
 │ ├── 01_data_exploration.ipynb
@@ -29,21 +28,10 @@ nlp-financial-reports/
 │ ├── baseline.py # TF-IDF + Logistic Regression (baseline model)
 │ ├── model.py # Fine-tuning transformer models (main model)
 │ └── evaluation.py # Metrics, visualizations, comparison
-│ ├── data_loader.py # Data download and EDGAR scraping
-│ ├── preprocessing.py # Text cleaning and tokenization
-│ ├── features.py # Linguistic and semantic feature extraction
-│ ├── model.py # Main model training pipeline
-│ ├── baseline.py # Baseline TF-IDF model
-│ └── evaluation.py # Metrics, plots, and evaluation logic
 │
 ├── results/
 │ ├── figures/ # Plots and graphs
 │ └── metrics.json # Evaluation metrics
-│ ├── figures/ # Visualizations
-│ └── metrics.json # Evaluation results
-│
-├── presentation/
-│ └── final_slides.pdf # Project presentation
 │
 ├── README.md
 ├── requirements.txt

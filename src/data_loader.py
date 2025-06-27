@@ -95,6 +95,6 @@ if __name__ == "__main__":
 
     # Download 10-K filings over 5 years for a list of tickers
     #tickers = ["AAPL", "TSLA", "JPM", "CVX", "KO", "AMC", "GME", "PLTR", "MSFT", "JNJ"]
-    tickers = ["AAPL", "TSLA"]
+    tickers = ["AAPL", "TSLA", "MSFT"]
     for ticker in tickers:
-        client.fetch_10k_filings(ticker, count=3)
+        client.fetch_10k_filings(ticker, count=1)
