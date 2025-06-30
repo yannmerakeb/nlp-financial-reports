@@ -3,7 +3,7 @@ import re
 from bs4 import BeautifulSoup
 
 class Preprocessor:
-    def __init__(self, raw_dir: str = "../data/raw", processed_dir: str = "../data/processed"):
+    def __init__(self, raw_dir: str = "data/raw", processed_dir: str = "data/processed"):
         self.raw_dir = raw_dir
         self.processed_dir = processed_dir
         os.makedirs(self.processed_dir, exist_ok=True)
@@ -70,7 +70,7 @@ class Preprocessor:
         processed_path = os.path.join(self.processed_dir, out_name)
         with open(processed_path, 'w', encoding='utf-8') as out:
             out.write(final_text)
-        print(f"[✓] Preprocessed: {processed_path}")
+        print(f"Preprocessed: {processed_path}")
 
     def batch_preprocess(self):
         """

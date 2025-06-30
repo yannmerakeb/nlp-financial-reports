@@ -9,7 +9,7 @@ HEADERS = {
 }
 
 class DataLoader:
-    def __init__(self, save_dir: str = "../data/raw", delay: float = 0.5):
+    def __init__(self, save_dir: str = "data/raw", delay: float = 0.5):
         """
         Initializes the DataLoader with a directory to save files and a delay for rate limiting.
         """
