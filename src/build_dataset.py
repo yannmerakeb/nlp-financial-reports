@@ -5,11 +5,16 @@ import os
 import glob
 import pandas as pd
 
+
+project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+DEFAULT_PROCESSED_DIR = os.path.join(project_root, "data", "processed")
+DEFAULT_OUTPUT_FILE  = os.path.join(DEFAULT_PROCESSED_DIR, "reports.parquet")
+
 class DatasetBuilder:
     """
     Gathers processed filings into a single DataFrame and saves as Parquet.
     """
-    def __init__(self, processed_dir: str = "data/processed", output_file: str = "data/processed/reports.parquet"):
+    def __init__(self, processed_dir: str = DEFAULT_PROCESSED_DIR, output_file: str = DEFAULT_OUTPUT_FILE):
         self.processed_dir = processed_dir
         self.output_file = output_file
 
@@ -64,6 +69,7 @@ class DatasetBuilder:
         Builds the dataset and writes it to the output Parquet file.
         """
         df = self.build()
+        print(df)
         os.makedirs(os.path.dirname(self.output_file), exist_ok=True)
         df.to_parquet(self.output_file, index=False)
         print(f"Dataset saved to: {self.output_file}")

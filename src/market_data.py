@@ -2,17 +2,23 @@
 """
 Module for fetching market data and computing abnormal returns using yfinance with robust fallback.
 """
+import os
 import yfinance as yf
 import pandas as pd
 import numpy as np
 import traceback
+
+project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+DEFAULT_PROCESSED_DIR        = os.path.join(project_root, "data", "processed")
+DEFAULT_REPORTS_FILE         = os.path.join(DEFAULT_PROCESSED_DIR, "reports.parquet")
+DEFAULT_ENRICHED_REPORTS_FILE = os.path.join(DEFAULT_PROCESSED_DIR, "reports_with_market.parquet")
 
 class MarketDataFetcher:
     """
     Retrieves historical price data and computes abnormal returns.
     Uses yfinance download; fallback to Ticker.history if needed.
     """
-    def __init__(self, output_file: str = "data/processed/reports_with_market.parquet"):
+    def __init__(self, output_file: str = DEFAULT_ENRICHED_REPORTS_FILE):
         """
         :param output_file: Path to save the dataset enriched with market returns
         """
@@ -101,7 +107,7 @@ class LocalMarketDataLoader:
     Loads price data from pre-downloaded CSV files to compute abnormal returns.
     """
     def __init__(self, price_file_paths: dict[str, str],
-                 output_file: str = "data/processed/reports_with_market.parquet"):
+                 output_file: str = DEFAULT_ENRICHED_REPORTS_FILE):
         self.price_file_paths = price_file_paths
         self.output_file = output_file
 

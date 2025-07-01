@@ -13,6 +13,11 @@ import spacy
 from collections import Counter
 
 
+project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+DEFAULT_INPUT_FILE  = os.path.join(project_root, "data", "processed", "reports_with_market.parquet")
+DEFAULT_OUTPUT_FILE = os.path.join(project_root, "data", "processed", "reports_features.parquet")
+
+
 class FeatureEngineer:
     """
     Extracts linguistic features from report sections and saves enriched DataFrame.
@@ -21,8 +26,8 @@ class FeatureEngineer:
     :param output_file: Path to write final Parquet with features appended
     """
     def __init__(self,
-                 input_file: str = "data/processed/reports_with_market.parquet",
-                 output_file: str = "data/processed/reports_features.parquet"):
+                 input_file: str = DEFAULT_INPUT_FILE,
+                 output_file: str = DEFAULT_OUTPUT_FILE):
         self.input_file = input_file
         self.output_file = output_file
         # Load SpaCy English model (or French 'fr_core_news_sm' if necessary)
@@ -114,6 +119,3 @@ class FeatureEngineer:
         print(f"Saved features to {self.output_file}")
 
 
-if __name__ == '__main__':
-    fe = FeatureEngineer()
-    fe.save()

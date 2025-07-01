@@ -2,8 +2,24 @@ import os
 import re
 from bs4 import BeautifulSoup
 
+
+import sys
+import json
+
+
+
+
+# Ensure project root on path
+project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+DEFAULT_RAW_DIR       = os.path.join(project_root, "data", "raw")
+DEFAULT_PROCESSED_DIR = os.path.join(project_root, "data", "processed")
+
+import spacy
+from typing import List, Tuple, Dict
+
+
 class Preprocessor:
-    def __init__(self, raw_dir: str = "data/raw", processed_dir: str = "data/processed"):
+    def __init__(self, raw_dir: str = DEFAULT_RAW_DIR, processed_dir: str = DEFAULT_PROCESSED_DIR):
         self.raw_dir = raw_dir
         self.processed_dir = processed_dir
         os.makedirs(self.processed_dir, exist_ok=True)
@@ -81,6 +97,4 @@ class Preprocessor:
                 print(f"Preprocessing {fname}")
                 self.preprocess_file(fname)
 
-if __name__ == "__main__":
-    pre = Preprocessor()
-    pre.batch_preprocess()
+

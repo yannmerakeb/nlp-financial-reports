@@ -15,6 +15,10 @@ try:
 except ImportError:
     SentenceTransformer = None
 
+_project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+DEFAULT_TFIDF_OUT  = os.path.join(_project_root, "data", "processed", "tfidf_features.parquet")
+DEFAULT_EMBED_OUT  = os.path.join(_project_root, "data", "processed", "embedding_features.parquet")
+
 class TfidfFeatureExtractor:
     """
     Generates TF-IDF features for documents and optionally reduces dimensionality via PCA.
@@ -26,7 +30,7 @@ class TfidfFeatureExtractor:
     def __init__(self,
                  max_features: int = 10000,
                  pca_components: int = 0,
-                 output_file: str = "data/processed/tfidf_features.parquet"):
+                 output_file: str = DEFAULT_TFIDF_OUT):
         self.max_features = max_features
         self.pca_components = pca_components
         self.output_file = output_file
@@ -73,7 +77,7 @@ class EmbeddingFeatureExtractor:
     """
     def __init__(self,
                  model_name: str = 'all-MiniLM-L6-v2',
-                 output_file: str = 'data/processed/embedding_features.parquet'):
+                 output_file: str = DEFAULT_EMBED_OUT):
         self.model_name = model_name
         self.output_file = output_file
         if SentenceTransformer:

@@ -4,18 +4,21 @@ import requests
 import time
 from typing import List
 
+project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+DEFAULT_RAW_DIR = os.path.join(project_root, "data", "raw")
+
 HEADERS = {
     "User-Agent": "Yann Merakeb yann.merakeb@dauphine.eu"
 }
 
 class DataLoader:
-    def __init__(self, save_dir: str = "data/raw", delay: float = 0.5):
+    def __init__(self, save_dir= DEFAULT_RAW_DIR, delay: float = 0.5):
         """
         Initializes the DataLoader with a directory to save files and a delay for rate limiting.
         """
         self.save_dir = save_dir
         self.delay = delay
-        os.makedirs(save_dir, exist_ok=True)
+        os.makedirs(self.save_dir, exist_ok=True)
 
     def get_cik(self, ticker: str) -> str:
         """
@@ -70,7 +73,7 @@ class DataLoader:
         with open(os.path.join(self.save_dir, filename), "w", encoding="utf-8") as f:
             f.write(response.text)
 
-        print(f"[✓] Downloaded: {filename}")
+        print(f"Downloaded: {filename}")
 
         # Respect SEC API rate limit
         time.sleep(self.delay)
@@ -90,11 +93,10 @@ class DataLoader:
             fname = f"{ticker}_10K_{year}.txt"
             self.download_filing(cik, accession, fname)
 
-if __name__ == "__main__":
-    client = DataLoader()
 
-    # Download 10-K filings over 5 years for a list of tickers
-    #tickers = ["AAPL", "TSLA", "JPM", "CVX", "KO", "AMC", "GME", "PLTR", "MSFT", "JNJ"]
-    tickers = ["AAPL", "TSLA", "MSFT"]
-    for ticker in tickers:
-        client.fetch_10k_filings(ticker, count=1)
+
+
+
+
+
+
